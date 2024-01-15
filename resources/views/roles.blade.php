@@ -16,7 +16,7 @@
                     
                     @foreach ($roles as $index => $role)
                         <div>
-                            <a href="{{route('role.detail', ['id' => $role->id])}}">{{$role->name}} - {{$role->code}}</a>
+                            <a href="{{route('role.detail', ['id' => $role->id])}}">{{++$index}}.{{$role->name}} - {{$role->code}}</a>
                         </div>
                     @endforeach
                 </div>

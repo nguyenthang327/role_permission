@@ -22,29 +22,39 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/role', [RoleController::class, 'index'])->name('role.index');
-Route::get('/role/detail/{id}', [RoleController::class, 'show'])->name('role.detail');
-Route::post('/role/{id}', [RoleController::class, 'store'])->name('role.create');
 
 
-Route::group(['prefix' => 'department', 'middleware' => 'permission'],function () {
-    Route::get('/', function () {
-        $title = 'Department';
-        return view('view-demo', compact('title'));
-    })->name('department.index');
-    Route::get('/detail', function () {
-        $title = 'Department detail';
-        return view('view-demo', compact('title'));
-    })->name('department.detail');
-});
+Route::middleware(['auth'])->group(function () {
+    Route::group(['prefix' => 'role'],function () {
+        Route::get('', [RoleController::class, 'index'])->name('role.index');
+        Route::get('/detail/{id}', [RoleController::class, 'show'])->name('role.detail');
+        Route::post('/{id}', [RoleController::class, 'store'])->name('role.create');
+    });
 
-Route::prefix('product')->group(function () {
-    Route::get('/', function () {
-        $title = 'Product';
-        return view('view-demo', compact('title'));
-    })->name('product.index');
-    Route::get('/detail', function () {
-        $title = 'Product detail';
-        return view('view-demo', compact('title'));
-    })->name('product.detail');
+    // ...
+    Route::group(['prefix' => 'department', 'middleware' => 'permission'], function () {
+        Route::get('/', function () {
+            $title = 'Department';
+            return view('department', compact('title'));
+        })->name('department.index');
+        Route::get('/detail/{id}', function () {
+            $title = 'Department detail';
+            return view('department', compact('title'));
+        })->name('department.detail');
+        Route::get('/abv/{id}', function () {
+            $title = 'Department detail';
+            return view('department', compact('title'));
+        });
+    });
+
+    Route::group(['prefix' => 'product', 'middleware' => 'permission'], function () {
+        Route::get('/', function () {
+            $title = 'Product';
+            return view('product', compact('title'));
+        })->name('product.index');
+        Route::get('/detail', function () {
+            $title = 'Product detail';
+            return view('product', compact('title'));
+        })->name('product.detail');
+    });
 });

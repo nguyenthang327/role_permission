@@ -20,6 +20,10 @@ class PermissionMiddleware
 
         $user = null;
         $permissionOfUser = [];
+        if(empty($routeName)){
+            return $next($request);
+        }
+
         if(auth()->user()){
             $user = auth()->user();
             $user = User::with(['roles.permissions'])->where('id', $user->id)->first();
@@ -30,12 +34,13 @@ class PermissionMiddleware
             }
         }
 
-        // if(!in_array($routeName, $permissionOfUser)){
-        //     return back()
-        // }
+        if(!in_array($routeName, $permissionOfUser)){
+            return response()->json(['Bạn không có quyền thực hiện chức năng này!'], 401);
+            return back();
+        }
 
         // dd($routeName);
-        
+
         return $next($request);
     }
 }

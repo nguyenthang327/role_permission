@@ -16,7 +16,7 @@
 
                     {{ __('You are logged in!') }}
                     <div>
-                        <a href="{{route('role.index')}}"></a>
+                        <a href="{{route('role.index')}}">Quản lý role</a>
                     </div>
                 </div>
             </div>

@@ -5,16 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
 {
-    
+
     public function index(){
         $roles = Role::get();
         return view('roles', compact('roles'));
     }
 
     public function show($id) {
+        // DB::enableQueryLog();
         $role = Role::with(['permissions'])
             ->where('id', $id)->first();
         if(!$role){
@@ -23,6 +25,7 @@ class RoleController extends Controller
         $permissions = Permission::with(['childPermission'])
             ->where('parent_id', null)->get();
             // dd($permissions->toArray());
+        // dd(DB::getQueryLog());
         return view('role-detail', compact('role', 'permissions'));
     }
 
